@@ -1,13 +1,13 @@
-var mContainer;
-var mCamera, mRenderer;
-var mControls;
+var m_container;
+var m_camera, m_renderer;
+var m_controls;
 
-var mScene;
+var m_scene;
 
-var mParticleCount = 3000;
+var m_particle_count = 3000;
 var m_particle_system;
 
-var mTime = 0.0;
+var m_time = 0.0;
 
 window.onload = function () {
   init();
@@ -23,17 +23,17 @@ function init() {
 }
 
 function initTHREE(container) {
-  mRenderer = new THREE.WebGLRenderer({antialias: false, alpha: true});
-  mRenderer.setSize(window.innerWidth, window.innerHeight);
+  m_renderer = new THREE.WebGLRenderer({antialias: false, alpha: true});
+  m_renderer.setSize(window.innerWidth, window.innerHeight);
 
-  mContainer = document.getElementById(container);
-  mContainer.appendChild(mRenderer.domElement);
+  m_container = document.getElementById(container);
+  m_container.appendChild(m_renderer.domElement);
 
-  mCamera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.5, 1000);
-  mCamera.position.set(20, 100, 400);
+  m_camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.5, 1000);
+  m_camera.position.set(20, 100, 400);
 
-  mScene = new THREE.Scene();
-  mScene.background = new THREE.Color( 0xff0000 );
+  m_scene = new THREE.Scene();
+  m_scene.background = new THREE.Color( 0xff0000 );
 
   //var ground = new THREE.Mesh(
     //new THREE.PlaneBufferGeometry(1200, 1200),
@@ -42,25 +42,25 @@ function initTHREE(container) {
     //})
   //);
   //ground.rotation.x = Math.PI * 1.5;
-  //mScene.add(ground);
+  //m_scene.add(ground);
 
   var light;
 
   light = new THREE.SpotLight(0xffffff, 4, 1600, Math.PI * 0.15, 24, 2);
   light.position.set(0, 1000, 0);
 
-  mScene.add(light);
+  m_scene.add(light);
 }
 
 function initControls() {
-  mControls = new THREE.OrbitControls(mCamera, mRenderer.domElement);
-  mControls.enabled = false;
-  mControls.target.y = 300;
+  m_controls = new THREE.OrbitControls(m_camera, m_renderer.domElement);
+  m_controls.enabled = false;
+  m_controls.target.y = 300;
 }
 
 function init_particle_system() {
   var prefab_geometry = new THREE.SphereGeometry(10, 2, 2, 0, 1, 1, 0.5);
-  var bufferGeometry = new THREE.BAS.PrefabBufferGeometry(prefab_geometry, mParticleCount);
+  var bufferGeometry = new THREE.BAS.PrefabBufferGeometry(prefab_geometry, m_particle_count);
 
   bufferGeometry.computeVertexNormals();
 
@@ -84,7 +84,7 @@ function init_particle_system() {
   var delay;
   var duration;
 
-  for (i = 0, offset = 0; i < mParticleCount; i++) {
+  for (i = 0, offset = 0; i < m_particle_count; i++) {
     delay = THREE.Math.randFloat(0, 20);
     duration =  THREE.Math.randFloat(20, 28);
 
@@ -97,7 +97,7 @@ function init_particle_system() {
   // buffer control points
   var x, y, z;
 
-  for (i = 0, offset = 0; i < mParticleCount; i++) {
+  for (i = 0, offset = 0; i < m_particle_count; i++) {
     x = THREE.Math.randFloat(-100, 100);
     y = THREE.Math.randFloat(600, 1000);
     z = THREE.Math.randFloat(-100, 100);
@@ -109,7 +109,7 @@ function init_particle_system() {
     }
   }
 
-  for (i = 0, offset = 0; i < mParticleCount; i++) {
+  for (i = 0, offset = 0; i < m_particle_count; i++) {
     x = THREE.Math.randFloat(-800, 800);
     y = THREE.Math.randFloat(200, 1000);
     z = THREE.Math.randFloat(-800, 800);
@@ -123,7 +123,7 @@ function init_particle_system() {
 
   // buffer end positions
 
-  for (i = 0, offset = 0; i < mParticleCount; i++) {
+  for (i = 0, offset = 0; i < m_particle_count; i++) {
     x = THREE.Math.randFloatSpread(1000);
     y = 0;
     z = THREE.Math.randFloatSpread(1000);
@@ -139,7 +139,7 @@ function init_particle_system() {
   var axis = new THREE.Vector3();
   var angle = 0;
 
-  for (i = 0, offset = 0; i < mParticleCount; i++) {
+  for (i = 0, offset = 0; i < m_particle_count; i++) {
     axis.x = THREE.Math.randFloatSpread(2);
     axis.y = THREE.Math.randFloatSpread(2);
     axis.z = THREE.Math.randFloatSpread(2);
@@ -159,7 +159,7 @@ function init_particle_system() {
   var color = new THREE.Color();
   var h, s, l;
 
-  for (i = 0, offset = 0; i < mParticleCount; i++) {
+  for (i = 0, offset = 0; i < m_particle_count; i++) {
     h = 0.894;
     s = 0.66;
     l = 0.43;
@@ -223,7 +223,7 @@ function init_particle_system() {
   var particle_system = new THREE.Mesh(bufferGeometry, material);
   particle_system.frustumCulled = false;
 
-  mScene.add(particle_system);
+  m_scene.add(particle_system);
   return particle_system;
 }
 
@@ -231,26 +231,26 @@ function tick() {
   update();
   render();
 
-  mTime += (1 / 60);
+  m_time += (1 / 60);
 
   requestAnimationFrame(tick);
 }
 
 function update() {
-  mControls.update();
+  m_controls.update();
 
-  m_particle_system.material.uniforms['uTime'].value = mTime;
+  m_particle_system.material.uniforms['uTime'].value = m_time;
 }
 
 function render() {
-  mRenderer.render(mScene, mCamera);
+  m_renderer.render(m_scene, m_camera);
 }
 
 function resize() {
-  mCamera.aspect = window.innerWidth / window.innerHeight;
-  mCamera.updateProjectionMatrix();
+  m_camera.aspect = window.innerWidth / window.innerHeight;
+  m_camera.updateProjectionMatrix();
 
-  mRenderer.setSize(window.innerWidth, window.innerHeight);
+  m_renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
 /////////////////////////////
