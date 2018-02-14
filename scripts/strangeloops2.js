@@ -30,7 +30,7 @@ function initTHREE() {
   mContainer.appendChild(mRenderer.domElement);
 
   mCamera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.5, 1000);
-  mCamera.position.set(20, 200, 400);
+  mCamera.position.set(20, 100, 400);
 
   mScene = new THREE.Scene();
   mScene.background = new THREE.Color( 0xff0000 );
@@ -54,7 +54,7 @@ function initTHREE() {
 
 function initControls() {
   mControls = new THREE.OrbitControls(mCamera, mRenderer.domElement);
-  mControls.enabled = false;
+  //mControls.enabled = false;
   mControls.target.y = 300;
 }
 
@@ -85,7 +85,7 @@ function initParticleSystem() {
   var duration;
 
   for (i = 0, offset = 0; i < mParticleCount; i++) {
-    delay = THREE.Math.randFloat(0, 30);
+    delay = THREE.Math.randFloat(0, 20);
     duration =  THREE.Math.randFloat(6, 18);
 
     for (j = 0; j < prefab_geometry.vertices.length; j++) {
