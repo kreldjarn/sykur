@@ -4,7 +4,7 @@ var mControls;
 
 var mScene;
 
-var mParticleCount = 5000;
+var mParticleCount = 3000;
 var m_particle_system;
 
 var mTime = 0.0;
@@ -14,7 +14,7 @@ window.onload = function () {
 };
 
 function init() {
-  initTHREE();
+  initTHREE('three-container');
   initControls();
   m_particle_system = init_particle_system();
 
@@ -22,11 +22,11 @@ function init() {
   window.addEventListener('resize', resize, false);
 }
 
-function initTHREE() {
+function initTHREE(container) {
   mRenderer = new THREE.WebGLRenderer({antialias: false, alpha: true});
   mRenderer.setSize(window.innerWidth, window.innerHeight);
 
-  mContainer = document.getElementById('three-container');
+  mContainer = document.getElementById(container);
   mContainer.appendChild(mRenderer.domElement);
 
   mCamera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.5, 1000);
@@ -86,7 +86,7 @@ function init_particle_system() {
 
   for (i = 0, offset = 0; i < mParticleCount; i++) {
     delay = THREE.Math.randFloat(0, 20);
-    duration =  THREE.Math.randFloat(6, 18);
+    duration =  THREE.Math.randFloat(20, 28);
 
     for (j = 0; j < prefab_geometry.vertices.length; j++) {
       aDelayDuration.array[offset++] = delay;
@@ -200,7 +200,7 @@ function init_particle_system() {
       shader_vertex_init: [
         'float tDelay = aDelayDuration.x;',
         'float tDuration = aDelayDuration.y;',
-        'float tTime = clamp(uTime - tDelay, 0.0, tDuration);',
+        'float tTime = mod(uTime - tDelay, tDuration);',
         'float tProgress = ease(tTime, 0.0, 1.0, tDuration);',
 
         'float angle = a_axis_angle.w * tProgress;',
@@ -232,7 +232,7 @@ function tick() {
   render();
 
   mTime += (1 / 60);
-  mTime %= 12;
+  mTime %= 30;
 
   requestAnimationFrame(tick);
 }
@@ -262,7 +262,7 @@ THREE.BAS = {};
 
 THREE.BAS.ShaderChunk = {};
 
-THREE.BAS.ShaderChunk["animation_time"] = "float tDelay = aAnimation.x;\nfloat tDuration = aAnimation.y;\nfloat tTime = clamp(uTime - tDelay, 0.0, tDuration);\nfloat tProgress = ease(tTime, 0.0, 1.0, tDuration);\n";
+THREE.BAS.ShaderChunk["animation_time"] = "float tDelay = aAnimation.x;\nfloat tDuration = aAnimation.y;\nfloat tTime = (uTime - tDelay) % tDuration;\nfloat tProgress = ease(tTime, 0.0, 1.0, tDuration);\n";
 
 THREE.BAS.ShaderChunk["cubic_bezier"] = "vec3 cubicBezier(vec3 p0, vec3 c0, vec3 c1, vec3 p1, float t)\n{\n    vec3 tp;\n    float tn = 1.0 - t;\n\n    tp.xyz = tn * tn * tn * p0.xyz + 3.0 * tn * tn * t * c0.xyz + 3.0 * tn * t * t * c1.xyz + t * t * t * p1.xyz;\n\n    return tp;\n}\n";
 
