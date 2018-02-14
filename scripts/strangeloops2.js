@@ -5,7 +5,7 @@ var mControls;
 var mScene;
 
 var mParticleCount = 5000;
-var mParticleSystem;
+var m_particle_system;
 
 var mTime = 0.0;
 
@@ -16,7 +16,7 @@ window.onload = function () {
 function init() {
   initTHREE();
   initControls();
-  initParticleSystem();
+  m_particle_system = init_particle_system();
 
   requestAnimationFrame(tick);
   window.addEventListener('resize', resize, false);
@@ -54,11 +54,11 @@ function initTHREE() {
 
 function initControls() {
   mControls = new THREE.OrbitControls(mCamera, mRenderer.domElement);
-  //mControls.enabled = false;
+  mControls.enabled = false;
   mControls.target.y = 300;
 }
 
-function initParticleSystem() {
+function init_particle_system() {
   var prefab_geometry = new THREE.SphereGeometry(10, 2, 2, 0, 1, 1, 0.5);
   var bufferGeometry = new THREE.BAS.PrefabBufferGeometry(prefab_geometry, mParticleCount);
 
@@ -160,9 +160,6 @@ function initParticleSystem() {
   var h, s, l;
 
   for (i = 0, offset = 0; i < mParticleCount; i++) {
-    //h = THREE.Math.randFloat(0.0, 1.0);
-    //s = THREE.Math.randFloat(0.75, 1.0);
-    //l = THREE.Math.randFloat(0.5, 0.6);
     h = 0.894;
     s = 0.66;
     l = 0.43;
@@ -223,10 +220,11 @@ function initParticleSystem() {
     }
   );
 
-  mParticleSystem = new THREE.Mesh(bufferGeometry, material);
-  mParticleSystem.frustumCulled = false;
+  var particle_system = new THREE.Mesh(bufferGeometry, material);
+  particle_system.frustumCulled = false;
 
-  mScene.add(mParticleSystem);
+  mScene.add(particle_system);
+  return particle_system;
 }
 
 function tick() {
@@ -242,7 +240,7 @@ function tick() {
 function update() {
   mControls.update();
 
-  mParticleSystem.material.uniforms['uTime'].value = mTime;
+  m_particle_system.material.uniforms['uTime'].value = mTime;
 }
 
 function render() {
