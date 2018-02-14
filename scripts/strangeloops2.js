@@ -232,7 +232,6 @@ function tick() {
   render();
 
   mTime += (1 / 60);
-  mTime %= 30;
 
   requestAnimationFrame(tick);
 }
