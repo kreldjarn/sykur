@@ -54,6 +54,7 @@ function initTHREE() {
 
 function initControls() {
   mControls = new THREE.OrbitControls(mCamera, mRenderer.domElement);
+  mControls.enabled = false;
   mControls.target.y = 300;
 }
 
@@ -218,7 +219,7 @@ function initParticleSystem() {
     },
     // THREE.MeshPhongMaterial uniforms
     {
-      shininess: 4
+      shininess: 20
     }
   );
 
